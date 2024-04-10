@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensagens</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('{{ url_for("static", filename="images/aviso_e_alertas.png") }}'); /* Use url_for para obter a URL da imagem */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #ffffffb0;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        h3 {
+            color: #007bff;
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: #28a745;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        /* Estilos para os pop-ups */
+        .popup-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            display: none;
+            z-index: 9999;
+        }
+
+        .popup {
+            margin-bottom: 15px;
+        }
+
+        .popup h3 {
+            color: #007bff;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .popup p {
+            font-size: 16px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Avisos</h1>
+        <div id="messages-container">
+            <!-- As mensagens serão carregadas aqui -->
+            {% for message in messages %}
+            <h3>{{ message[1] }}</h3>
+            <p>{{ message[2] }}</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Contêiner para pop-ups -->
+    <div class="popup-container" id="popup-container"></div>
+
+    <!-- Código JavaScript para atualizar as mensagens automaticamente -->
+    <script>
+        function createPopup(title, message) {
+            // Criar um elemento de pop-up
+            var popup = document.createElement('div');
+            popup.classList.add('popup');
+
+            // Adicionar título e mensagem ao pop-up
+            popup.innerHTML = '<h3>' + title + '</h3><p>' + message + '</p>';
+
+            // Adicionar pop-up ao contêiner de pop-ups
+            document.getElementById('popup-container').appendChild(popup);
+
+            // Fechar o pop-up após 5 segundos
+            setTimeout(function() {
+                popup.remove();
+            }, 5000);
+        }
+
+        // Função para fazer uma requisição AJAX para obter as mensagens
+        function fetchMessages() {
+            fetch('/get_messages') // Rota no servidor para obter as mensagens
+                .then(response => response.json())
+                .then(messages => {
+                    const messagesContainer = document.getElementById('messages-container');
+                    messagesContainer.innerHTML = ''; // Limpa as mensagens existentes
+
+                    // Adiciona as novas mensagens ao container
+                    messages.forEach(message => {
+                        const messageDiv = document.createElement('div');
+                        messageDiv.innerHTML = `
+                            <h3>${message.title}</h3>
+                            <p>${message.content}</p>
+                        `;
+                        messagesContainer.appendChild(messageDiv);
+                    });
+
+                    // Exibir notificação se houver mensagens novas
+                    if (messages.length > 0) {
+                        const latestMessage = messages[messages.length - 1];
+                        showNotificationWithUpdatedContent(latestMessage.content);
+                    }
+                })
+                .catch(error => console.error('Erro ao obter as mensagens:', error));
+        }
+
+        // Atualiza as mensagens a cada 30 segundos
+        setInterval(fetchMessages, 30000);
+
+        // Exibir notificação quando a página for carregada
+        window.onload = function() {
+            if (Notification.permission !== 'granted') {
+                Notification.requestPermission();
+            } else {
+                var notification = new Notification('Mensagens', {
+                    body: 'A tela foi atualizada.',
+                });
+            }
+        };
+
+        // Função para exibir notificação com conteúdo atualizado
+        function showNotificationWithUpdatedContent(messageContent) {
+            if (Notification.permission !== 'granted') {
+                Notification.requestPermission();
+            } else {
+                var notification = new Notification('Mensagens', {
+                    body: 'Conteúdo atualizado: ' + messageContent,
+                });
+            }
+        }
+    </script>
+</body>
+</html>
