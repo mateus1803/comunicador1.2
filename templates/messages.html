@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mensagens</title>
+    <title>Avisos</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/messages.css') }}">
 </head>
 <body>
@@ -26,21 +26,32 @@
 
     <!-- Código JavaScript para atualizar as mensagens automaticamente -->
     <script>
+        // Variável para armazenar o conteúdo da última mensagem
+        var lastMessageContent = '';
+
+        // Função para criar um elemento de pop-up
         function createPopup(title, message) {
-            // Criar um elemento de pop-up
             var popup = document.createElement('div');
             popup.classList.add('popup');
-
-            // Adicionar título e mensagem ao pop-up
             popup.innerHTML = '<h3>' + title + '</h3><p>' + message + '</p>';
-
-            // Adicionar pop-up ao contêiner de pop-ups
             document.getElementById('popup-container').appendChild(popup);
-
-            // Fechar o pop-up após 5 segundos
             setTimeout(function() {
                 popup.remove();
             }, 5000);
+        }
+
+        // Função para exibir notificação com conteúdo atualizado
+        function showNotificationWithUpdatedContent(messageContent) {
+            if (messageContent !== lastMessageContent) {
+                if (Notification.permission !== 'granted') {
+                    Notification.requestPermission();
+                } else {
+                    var notification = new Notification('Mensagens', {
+                        body: 'Conteúdo atualizado: ' + messageContent,
+                    });
+                    lastMessageContent = messageContent;
+                }
+            }
         }
 
         // Função para fazer uma requisição AJAX para obter as mensagens
@@ -51,19 +62,17 @@
                     const messagesContainer = document.getElementById('messages-container');
                     messagesContainer.innerHTML = ''; // Limpa as mensagens existentes
 
-                    // Adiciona as novas mensagens ao container
                     messages.forEach(message => {
                         const messageDiv = document.createElement('div');
                         messageDiv.classList.add('message');
                         messageDiv.innerHTML = `
                             <h3>${message.title}</h3>
                             <p>${message.content}</p>
-                            <p>Data e Hora: ${message.datetime}</p> <!-- Adicione esta linha -->
+                            <p>Data e Hora: ${message.datetime}</p>
                         `;
                         messagesContainer.appendChild(messageDiv);
                     });
 
-                    // Exibir notificação se houver mensagens novas
                     if (messages.length > 0) {
                         const latestMessage = messages[messages.length - 1];
                         showNotificationWithUpdatedContent(latestMessage.content);
@@ -72,8 +81,8 @@
                 .catch(error => console.error('Erro ao obter as mensagens:', error));
         }
 
-        // Atualiza as mensagens a cada 5 segundos
-        setInterval(fetchMessages, 5000);
+        // Atualiza as mensagens a cada 1 segundo (1000 milissegundos)
+        setInterval(fetchMessages, 1000);
 
         // Exibir notificação quando a página for carregada
         window.onload = function() {
@@ -85,17 +94,6 @@
                 });
             }
         };
-
-        // Função para exibir notificação com conteúdo atualizado
-        function showNotificationWithUpdatedContent(messageContent) {
-            if (Notification.permission !== 'granted') {
-                Notification.requestPermission();
-            } else {
-                var notification = new Notification('Mensagens', {
-                    body: 'Conteúdo atualizado: ' + messageContent,
-                });
-            }
-        }
     </script>
 </body>
 </html>
