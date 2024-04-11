@@ -1,0 +1,94 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('/static/images/aviso_e_alertas.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #ffffffb0;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 30px;
+}
+
+h3 {
+    color: #007bff;
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+p {
+    color: #28a745;
+    font-size: 18px;
+    text-align: center;
+}
+
+/* Estilos para as mensagens */
+.message {
+    background-color: #494848;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.message h3 {
+    color: #007bff;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.message p {
+    color: #28a745;
+    font-size: 18px;
+}
+
+/* Estilos para os pop-ups */
+.popup-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    display: none;
+    z-index: 9999;
+}
+
+.popup {
+    margin-bottom: 15px;
+}
+
+.popup h3 {
+    color: #007bff;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.popup p {
+    font-size: 16px;
+    margin: 0;
+}

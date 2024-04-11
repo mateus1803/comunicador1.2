@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 import sqlite3
+import datetime
 
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta'
@@ -11,9 +12,11 @@ def create_table():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS messages (
-                      id INTEGER PRIMARY KEY AUTOINCREMENT,
-                      title TEXT NOT NULL,
-                      content TEXT NOT NULL)''')
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  title TEXT NOT NULL,
+                  content TEXT NOT NULL,
+                  datetime TEXT NOT NULL)''')
+
     conn.commit()
     conn.close()
 
@@ -31,7 +34,8 @@ def admin():
         
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO messages (title, content) VALUES (?, ?)", (title, content))
+        datetime_now = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+        cursor.execute("INSERT INTO messages (title, content, datetime) VALUES (?, ?, ?)", (title, content, datetime_now))
         conn.commit()
         conn.close()
         
@@ -45,7 +49,6 @@ def admin():
     conn.close()
 
     return render_template('admin.html', messages=messages)
-
 
 @app.route('/messages')
 def view_messages():
@@ -66,7 +69,7 @@ def get_messages():
     conn.close()
 
     # Formatar mensagens como JSON
-    formatted_messages = [{'id': msg[0], 'title': msg[1], 'content': msg[2]} for msg in messages]
+    formatted_messages = [{'id': msg[0], 'title': msg[1], 'content': msg[2], 'datetime': msg[3]} for msg in messages]
     return jsonify(formatted_messages)
 
 @app.route('/edit_message/<int:message_id>', methods=['GET', 'POST'])
@@ -110,4 +113,3 @@ def redirect_to_index():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
-    app.run(debug=True)

@@ -5,12 +5,23 @@ body {
     background-color: #f2f2f2;
 }
 
-header {
+header img {
+    
     background-color: #333;
     color: #fff;
-    padding: 20px;
+    padding: 5px; /* Reduzindo o padding para 10 pixels */
     text-align: center;
+    background-size: cover; /* Redimensiona a imagem para cobrir todo o cabeçalho */
+    background-repeat: repeat; /* Evita que a imagem se repita */
+    background-position: center; /* Centraliza a imagem */
+    height: 100px; /* Definindo uma altura para o cabeçalho */
+    width: 100%; /* Define a largura do cabeçalho como 100% da largura da tela */
 }
+
+
+
+
+
 
 .container {
     max-width: 600px;
