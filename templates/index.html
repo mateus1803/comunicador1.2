@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">    
 </head>
 <body>
-    <h1>Bem-vindo ao Sistema de Avisos</h1>
+    <h1>Bem-vindo ao <strong >Sistema de Avisos do Latrel</strong></h1>
     
     <a href="/messages">Ver Avisos</a>
 
     <div id="login-form">
-        <h2>Para enviar mensagens, faça login:</h2>
+        <h2>Para enviar Avisos, faça login:</h2>
         <form onsubmit="return validateLogin()">
             <input type="text" id="username" placeholder="Usuário" required><br>
             <input type="password" id="password" placeholder="Senha" required><br>

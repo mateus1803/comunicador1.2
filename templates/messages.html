@@ -15,7 +15,8 @@
             <div class="message">
                 <h3>{{ message.title }}</h3>
                 <p>{{ message.content }}</p>
-                <p>Data e Hora: {{ message.datetime }}</p> <!-- Adicione esta linha -->
+                <p>Data e Hora: {{ message.datetime }}</p>
+                <a href="/message_history/{{ message.id }}">Histórico</a> <!-- Adicionando o link para o histórico -->
             </div>
             {% endfor %}
         </div>
@@ -29,16 +30,40 @@
         // Variável para armazenar o conteúdo da última mensagem
         var lastMessageContent = '';
 
-        // Função para criar um elemento de pop-up
-        function createPopup(title, message) {
-            var popup = document.createElement('div');
-            popup.classList.add('popup');
-            popup.innerHTML = '<h3>' + title + '</h3><p>' + message + '</p>';
-            document.getElementById('popup-container').appendChild(popup);
-            setTimeout(function() {
-                popup.remove();
-            }, 5000);
+        // Função para fazer uma requisição AJAX para obter as mensagens
+        function fetchMessages() {
+            fetch('/get_messages') // Rota no servidor para obter as mensagens
+                .then(response => response.json())
+                .then(messages => {
+                    const messagesContainer = document.getElementById('messages-container');
+                    messagesContainer.innerHTML = ''; // Limpa as mensagens existentes
+
+                    messages.forEach(message => {
+                        const messageDiv = document.createElement('div');
+                        messageDiv.classList.add('message');
+                        messageDiv.innerHTML = `
+                            <h3>${message.title}</h3>
+                            <p id="priority" class="priority-text" style="color: ${getColorByPriority(message.priority)};">Situação: ${message.priority}</p>
+                            <p>${message.content}</p>
+                            <p>Data e Hora: ${message.datetime}</p>
+                            <a href="/message_history/${message.id}">Histórico</a>
+                        `;
+                        messagesContainer.appendChild(messageDiv);
+                    });
+
+                    if (messages.length > 0) {
+                        const latestMessage = messages[messages.length - 1];
+                        showNotificationWithUpdatedContent(latestMessage.content);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao obter as mensagens:', error);
+                    showNotificationWithUpdatedContent('Erro ao obter as mensagens.');
+                });
         }
+
+        // Atualiza as mensagens a cada 1 segundo (1000 milissegundos)
+        setInterval(fetchMessages, 1000);
 
         // Função para exibir notificação com conteúdo atualizado
         function showNotificationWithUpdatedContent(messageContent) {
@@ -54,36 +79,6 @@
             }
         }
 
-        // Função para fazer uma requisição AJAX para obter as mensagens
-        function fetchMessages() {
-            fetch('/get_messages') // Rota no servidor para obter as mensagens
-                .then(response => response.json())
-                .then(messages => {
-                    const messagesContainer = document.getElementById('messages-container');
-                    messagesContainer.innerHTML = ''; // Limpa as mensagens existentes
-
-                    messages.forEach(message => {
-                        const messageDiv = document.createElement('div');
-                        messageDiv.classList.add('message');
-                        messageDiv.innerHTML = `
-                            <h3>${message.title}</h3>
-                            <p>${message.content}</p>
-                            <p>Data e Hora: ${message.datetime}</p>
-                        `;
-                        messagesContainer.appendChild(messageDiv);
-                    });
-
-                    if (messages.length > 0) {
-                        const latestMessage = messages[messages.length - 1];
-                        showNotificationWithUpdatedContent(latestMessage.content);
-                    }
-                })
-                .catch(error => console.error('Erro ao obter as mensagens:', error));
-        }
-
-        // Atualiza as mensagens a cada 1 segundo (1000 milissegundos)
-        setInterval(fetchMessages, 1000);
-
         // Exibir notificação quando a página for carregada
         window.onload = function() {
             if (Notification.permission !== 'granted') {
@@ -94,6 +89,20 @@
                 });
             }
         };
+
+        // Função para retornar a cor com base na prioridade
+        function getColorByPriority(priority) {
+            switch (priority) {
+                case 'com problema':
+                    return '#ff0000'; // Vermelho
+                case 'manutenção':
+                    return '#0000ff'; // Azul
+                case 'resolvido':
+                    return '#00cc00'; // Verde
+                default:
+                    return '#000'; // Cor padrão
+            }
+        }
     </script>
 </body>
 </html>

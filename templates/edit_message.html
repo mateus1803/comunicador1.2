@@ -12,6 +12,12 @@
         <input type="text" id="title" name="title" value="{{ message[1] }}"><br>
         <label for="content">Conteúdo:</label><br>
         <textarea id="content" name="content">{{ message[2] }}</textarea><br>
+        <label for="priority">Prioridade:</label>
+        <select id="priority" name="priority">
+            <option value="com problema" {% if message[3] == 'com problema' %}selected{% endif %}>Com Problema</option>
+            <option value="manutenção" {% if message[3] == 'manutenção' %}selected{% endif %}>Manutenção</option>
+            <option value="resolvido" {% if message[3] == 'resolvido' %}selected{% endif %}>Resolvido</option>
+        </select><br>
         <button type="submit">Salvar</button>
     </form>
 </body>

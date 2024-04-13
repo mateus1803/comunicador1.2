@@ -1,5 +1,8 @@
 body {
-    background-image: url('/static/images/aviso_e_alertas.png');
+    background-image: url('/static/images/fotodabct.png');
+    background-size: cover; /* Garante que a imagem cubra todo o fundo */
+    background-position: center;
+    background-attachment: fixed; /* Mantém a imagem de fundo fixa */
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
     margin: 0;
@@ -11,26 +14,52 @@ body {
     min-height: 100vh; /* Alteração para manter o conteúdo no centro da tela */
 }
 
+@keyframes blink {
+    20% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes grow {
+    0% { font-size: 30px; }
+    50% { font-size: 30px; }
+    100% { font-size: 30px; }
+}
+strong{
+font-size: 40px;   
+font-weight: bold;
+color: rgb(229, 255, 0);
+animation: blink 1s infinite alternate, grow 1s infinite alternate;
+
+}
+
+
+
 h1, h2 {
-    font-size: 36px; /* Aumenta o tamanho do título */
+    font-size: 30px; /* Aumenta o tamanho do título */
     margin-bottom: 10px; /* Reduz o espaço entre os títulos */
     color: #ffffff;
-    background-color: #000000;
+    background-color: #1b3d9b;
     border-radius: 10px;
     padding: 15px 30px; /* Aumenta o espaçamento interno */
     display: inline-block;
     transition: all 0.3s ease;
 }
 
+h2{
+    font-size: 20px;
+}
+
 h1:hover, h2:hover {
-    background-color: #333333;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    background-color: #280057;
+    box-shadow: 0 0 10px rgba(0, 4, 255, 0.5);
 }
 
 a {
     text-decoration: none;
+    font-size: bold;
     color: #ffffff;     
-    font-size: 24px;
+    font-size: 26px;
     margin-bottom: 30px; /* Aumenta o espaço abaixo do link */
     background-color: rgb(214, 8, 8);
     padding: 20px 40px; /* Aumenta o tamanho do botão */
@@ -39,7 +68,7 @@ a {
 }
 
 a:hover {
-    background-color: #ff0000;
+    background-color: #ff3300;
 }
 
 #login-form {

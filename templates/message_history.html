@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Mensagem</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/messages.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Histórico de Mensagem</h1>
+        <div id="history-container">
+            <!-- O histórico da mensagem será carregado aqui -->
+            {% for entry in history %}
+            <div class="history-entry">
+                <p><strong>Data e Hora:</strong> {{ entry.datetime }}</p>
+                <p><strong>Ação:</strong> {{ entry.action }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
