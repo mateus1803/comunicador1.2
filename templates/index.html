@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Message System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>   
+    
+   
 </head>
 <body>
-    <h1>Bem-vindo ao <strong >Sistema de Avisos do Latrel</strong></h1>
+    <h1>Bem-vindo ao <strong >Sistema de Avisos do Process</strong></h1>
     
     <a href="/messages">Ver Avisos</a>
 
@@ -20,22 +23,10 @@
         </form>
     </div>
 
-    <script>
-        function validateLogin() {
-            var username = document.getElementById('username').value;
-            var password = document.getElementById('password').value;
 
-            // Verificar se as credenciais são válidas (pode ser substituído por lógica de backend)
-            if (username === "admin" && password === "Process2030*") {
-                // Redirecionar para a página de envio de mensagens
-                window.location.href = "/admin";
-                return false; // Impede o envio do formulário
-            } else {
-                // Exibir mensagem de erro
-                alert("Usuário ou senha inválidos");
-                return false;
-            }
-        }
+    <script>
+     
     </script>
+    
 </body>
 </html>

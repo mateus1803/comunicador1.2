@@ -70,8 +70,8 @@ p {
 }
 
 .message h3 {
-    color: #ffee02;
-    font-size: 20px;
+    color: #00fcef;
+    font-size: 24px;
     margin-bottom: 10px;
 }
 
@@ -120,9 +120,9 @@ p {
 }
 
 .priority-manutencao {
-    color: blue;
+    color: #fffb00;
 }
 
 .priority-resolvido {
-    color: green;
+    color: #008000;
 }

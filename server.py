@@ -37,6 +37,7 @@ def insert_message(title, content, priority):
     conn.commit()
     conn.close()
 
+
 # Função para obter todas as mensagens do banco de dados
 def get_messages():
     conn = sqlite3.connect(DB_NAME)
@@ -47,12 +48,14 @@ def get_messages():
     return messages
 
 # Função para editar uma mensagem no banco de dados
-def edit_message(message_id, new_title, new_content, new_priority):
+def update_message(message_id, new_title, new_content, new_priority):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute("UPDATE messages SET title=?, content=?, priority=? WHERE id=?", (new_title, new_content, new_priority, message_id))
     conn.commit()
     conn.close()
+
+
 
 # Função para excluir uma mensagem do banco de dados
 def delete_message(message_id):
@@ -68,6 +71,10 @@ def delete_message(message_id):
         cursor.execute("DELETE FROM messages WHERE id=?", (message_id,))
         conn.commit()
     conn.close()
+
+    
+
+
 
 # Função para obter o histórico de uma mensagem do banco de dados
 def get_message_history(message_id):
@@ -106,13 +113,16 @@ def get_messages_json():
     formatted_messages = [{'id': msg[0], 'title': msg[1], 'content': msg[2], 'priority': msg[3], 'datetime': msg[4]} for msg in messages]
     return jsonify(formatted_messages)
 
+
+
+
 @app.route('/edit_message/<int:message_id>', methods=['GET', 'POST'])
-def edit_message(message_id):
+def edit_message_route(message_id):
     if request.method == 'POST':
         new_title = request.form['title']
         new_content = request.form['content']
         new_priority = request.form['priority']  # Novo campo de prioridade
-        edit_message(message_id, new_title, new_content, new_priority)
+        update_message(message_id, new_title, new_content, new_priority)
         flash('Mensagem editada com sucesso', 'success')
         return redirect(url_for('admin'))
 
@@ -123,6 +133,10 @@ def edit_message(message_id):
     conn.close()
 
     return render_template('edit_message.html', message=message)
+
+
+
+
 
 @app.route('/delete_message/<int:message_id>')
 def delete_message_route(message_id):
