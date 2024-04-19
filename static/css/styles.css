@@ -9,15 +9,51 @@ header img {
     
     background-color: #333;
     color: #fff;
-    padding: 5px; /* Reduzindo o padding para 10 pixels */
+    padding: 0px; /* Reduzindo o padding para 10 pixels */
     text-align: center;
     background-size: cover; /* Redimensiona a imagem para cobrir todo o cabeçalho */
     background-repeat: repeat; /* Evita que a imagem se repita */
-    background-position: center; /* Centraliza a imagem */
+    background-position: center center; /* Centraliza a imagem */
     height: 100px; /* Definindo uma altura para o cabeçalho */
     width: 100%; /* Define a largura do cabeçalho como 100% da largura da tela */
 }
 
+/* Estilo do menu de navegação */
+header nav {
+    text-align: center; /* Centralizar os itens do menu */
+}
+
+header nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: inline-block; /* Exibir como bloco inline para centralizar */
+}
+
+header nav ul li {
+    display: inline;
+    margin-right: 20px; /* Espaço entre os itens do menu */
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: #333; /* Cor do texto do link */
+    font-weight: bold; /* Estilo de fonte em negrito */
+    padding: 5px 10px; /* Espaçamento interno do link */
+    transition: background-color 0.3s ease; /* Transição suave para a cor de fundo */
+}
+
+header nav ul li a:hover {
+    background-color: #0077ff60; /* Cor de fundo quando o link é hover */
+}
+
+/* Media query para dispositivos de largura máxima de 600px */
+@media only screen and (max-width: 600px) {
+    header nav ul li {
+        display: block; /* Alterar para bloco para empilhar os itens do menu verticalmente */
+        margin: 10px 0; /* Espaçamento entre os itens do menu */
+    }
+}
 
 
 

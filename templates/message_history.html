@@ -1,23 +1,56 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Histórico de Mensagem</title>
+    <title>Histórico de Avisos resolvidos</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/messages.css') }}">
 </head>
+
 <body>
     <div class="container">
-        <h1>Histórico de Mensagem</h1>
-        <div id="history-container">
-            <!-- O histórico da mensagem será carregado aqui -->
-            {% for entry in history %}
-            <div class="history-entry">
-                <p><strong>Data e Hora:</strong> {{ entry.datetime }}</p>
-                <p><strong>Ação:</strong> {{ entry.action }}</p>
+        <div class="message-container">
+            <h1>Avisos Resolvidos</h1>
+            <div id="resolved-messages-container">
+                <!-- As mensagens resolvidas serão carregadas aqui -->
             </div>
-            {% endfor %}
         </div>
-    </div>
+        <button class="back-button" onclick="window.history.back()">Voltar</button>
+        <div class="popup-container" id="popup-container"></div>
+
+        <script>
+            // Função para fazer uma requisição AJAX para obter as mensagens resolvidas
+            function fetchResolvedMessages() {
+                fetch('/get_resolved_messages') // Rota no servidor para obter as mensagens resolvidas
+                    .then(response => response.json())
+                    .then(messages => {
+                        const resolvedMessagesContainer = document.getElementById('resolved-messages-container');
+                        resolvedMessagesContainer.innerHTML = ''; // Limpa as mensagens resolvidas existentes
+
+                        messages.forEach(message => {
+                            const messageDiv = document.createElement('div');
+                            messageDiv.classList.add('message');
+                            messageDiv.innerHTML = `
+                            <h3>${message.title}</h3>
+                            <p>${message.content}</p>
+                            <p>Data e Hora: ${message.datetime}</p>
+                            
+                        `;
+                            resolvedMessagesContainer.appendChild(messageDiv);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Erro ao obter as mensagens resolvidas:', error);
+                    });
+            }
+
+            // Atualiza as mensagens resolvidas a cada 5 segundos (5000 milissegundos)
+            setInterval(fetchResolvedMessages, 5000);
+
+            // Chamar a função fetchResolvedMessages uma vez quando a página for carregada
+            fetchResolvedMessages();
+        </script>
 </body>
+
 </html>

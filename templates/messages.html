@@ -1,108 +1,46 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Avisos</title>
+    <script src="{{ url_for('static', filename='js/messages.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/messages.css') }}">
 </head>
+
+<header>
+    <!-- Menu -->
+    <div class="menu">
+        <a href='/message_history'>Ver Histórico de Avisos</a>
+    </div>
+</header>
+
+
 <body>
     <div class="container">
-        <h1>Avisos</h1>
-        <div id="messages-container">
-            <!-- As mensagens serão carregadas aqui -->
-            {% for message in messages %}
-            <div class="message">
-                <h3>{{ message.title }}</h3>
-                <p>{{ message.content }}</p>
-                <p>Data e Hora: {{ message.datetime }}</p>
-                <a href="/message_history/{{ message.id }}">Histórico</a> <!-- Adicionando o link para o histórico -->
+        <div class="message-container">
+            <h1>Avisos</h1>
+            <div id="messages-container">
+                <!-- As mensagens serão carregadas aqui -->
+                {% for message in messages %}
+                <div class="message">
+                    <h3>{{ message.title }}</h3>
+                    <p>{{ message.content }}</p>
+                    <p>Data e Hora: {{ message.datetime }}</p>
+                    <div class="like-container">
+                        <button class="like-button" onclick="handleLikeClick('{{ message.id }}')">👍</button>
+                        <span id="like-count-{{ message.id }}" class="like-count">0</span>
+                    </div>
+                    
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
-
     <!-- Contêiner para pop-ups -->
     <div class="popup-container" id="popup-container"></div>
 
-    <!-- Código JavaScript para atualizar as mensagens automaticamente -->
-    <script>
-        // Variável para armazenar o conteúdo da última mensagem
-        var lastMessageContent = '';
-
-        // Função para fazer uma requisição AJAX para obter as mensagens
-        function fetchMessages() {
-            fetch('/get_messages') // Rota no servidor para obter as mensagens
-                .then(response => response.json())
-                .then(messages => {
-                    const messagesContainer = document.getElementById('messages-container');
-                    messagesContainer.innerHTML = ''; // Limpa as mensagens existentes
-
-                    messages.forEach(message => {
-                        const messageDiv = document.createElement('div');
-                        messageDiv.classList.add('message');
-                        messageDiv.innerHTML = `
-                            <h3>${message.title}</h3>
-                            <p id="priority" class="priority-text" style="color: ${getColorByPriority(message.priority)};">Situação: ${message.priority}</p>
-                            <p>${message.content}</p>
-                            <p>Data e Hora: ${message.datetime}</p>
-                            <a href="/message_history/${message.id}">Histórico</a>
-                        `;
-                        messagesContainer.appendChild(messageDiv);
-                    });
-
-                    if (messages.length > 0) {
-                        const latestMessage = messages[messages.length - 1];
-                        showNotificationWithUpdatedContent(latestMessage.content);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao obter as mensagens:', error);
-                    showNotificationWithUpdatedContent('Erro ao obter as mensagens.');
-                });
-        }
-
-        // Atualiza as mensagens a cada 1 segundo (1000 milissegundos)
-        setInterval(fetchMessages, 1000);
-
-        // Função para exibir notificação com conteúdo atualizado
-        function showNotificationWithUpdatedContent(messageContent) {
-            if (messageContent !== lastMessageContent) {
-                if (Notification.permission !== 'granted') {
-                    Notification.requestPermission();
-                } else {
-                    var notification = new Notification('Mensagens', {
-                        body: 'Conteúdo atualizado: ' + messageContent,
-                    });
-                    lastMessageContent = messageContent;
-                }
-            }
-        }
-
-        // Exibir notificação quando a página for carregada
-        window.onload = function() {
-            if (Notification.permission !== 'granted') {
-                Notification.requestPermission();
-            } else {
-                var notification = new Notification('Mensagens', {
-                    body: 'A tela foi atualizada.',
-                });
-            }
-        };
-
-        // Função para retornar a cor com base na prioridade
-        function getColorByPriority(priority) {
-            switch (priority) {
-                case 'com problema':
-                    return '#ff0000'; // Vermelho
-                case 'manutenção':
-                    return '#fffb00'; // Azul
-                case 'resolvido':
-                    return '#00cc00'; // Verde
-                default:
-                    return '#000'; // Cor padrão
-            }
-        }
-    </script>
 </body>
+
 </html>

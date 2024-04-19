@@ -9,7 +9,15 @@
 <body>
     <header>
         <!-- Espaço para inserir uma imagem -->
-        <img src="static\images\fotodopau.png" alt="Logo"> 
+        <img src="static\images\banner.png" alt="Logo"> 
+        <!-- Menu de navegação -->
+        <nav>
+            <ul>
+                <li><a href="/">Página Inicial</a></li>
+                <li><a href="/admin">Enviar Avisos</a></li>
+                <li><a href="/messages">Ver Mensagens</a></li>
+            </ul>
+        </nav>
     </header>
 
     <div class="container">
@@ -41,7 +49,7 @@
         {% endwith %}
 
         <!-- Exibir mensagens existentes -->
-        <h2>Mensagens Enviadas</h2>
+        <h2>Avisos Enviadas</h2>
         <ul>
             {% for message in messages %}
                 <li>
@@ -52,8 +60,18 @@
             {% endfor %}
         </ul>
 
-        <!-- Botão para visualizar mensagens -->
-        <a href="/messages" class="view-messages-button">Ver Mensagens</a>
+        <!-- Exibir mensagens resolvidas -->
+        <h2>Avisos Resolvidos</h2>
+        <ul>
+            {% for message in resolved_messages %}
+                <li>
+                    <strong>{{ message[1] }}</strong>: {{ message[2] }}
+                </li>
+            {% endfor %}
+        </ul>
+
+       
+        
     </div>
 </body>
 </html>
