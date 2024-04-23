@@ -1,26 +1,3 @@
-@keyframes blink-animation {
-    0% {
-        opacity: 0;
-    }
-    50% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
-}
-
-@keyframes blink {
-    10% { opacity: 1; color: black; }
-    50% { opacity: 0; color: rgb(255, 0, 0); }
-    100% { opacity: 1; color: black; }
-}
-
-h1 {
-    animation: blink 1s infinite; /* Definindo a animação */
-}
-
-
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -32,12 +9,15 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-image: url('/static/images/fotodabct.png');
-
+    background-image: url('/static/images/resolvidos.png');
     background-position: center;
-    margin: 0;
-    padding: 0;
-}   
+    background-size: cover; /* torna a imagem responsiva */
+    margin: 0; /* removido para evitar duplicação */
+    padding: 0; /* removido para evitar duplicação */
+}
+
+
+
 
 header {
     background-color: #333; /* Cor de fundo do cabeçalho */

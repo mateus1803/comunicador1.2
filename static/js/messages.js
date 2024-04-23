@@ -1,28 +1,56 @@
-// Variável global para rastrear se o usuário já votou
-var hasVoted = false;
+// Função para verificar se o usuário já votou nesta mensagem
+function hasUserVoted(messageId) {
+    var votedMessages = JSON.parse(localStorage.getItem('votedMessages')) || [];
+    return votedMessages.includes(messageId.toString());
+}
 
-// Função para lidar com o clique no botão de "like"
-function handleLikeClick(messageId) {
-    // Verifica se o usuário já votou
-    if (!hasVoted) {
-        // Aqui você pode implementar a lógica para enviar uma requisição ao servidor informando que o usuário curtiu a mensagem
-        console.log('O usuário curtiu a mensagem com o ID:', messageId);
+// Função para armazenar o ID da mensagem em que o usuário votou
+function recordVote(messageId) {
+    var votedMessages = JSON.parse(localStorage.getItem('votedMessages')) || [];
+    votedMessages.push(messageId.toString());
+    localStorage.setItem('votedMessages', JSON.stringify(votedMessages));
+}
 
-        // Atualiza o contador de likes
-        var likeCountElement = document.querySelector('#messages-container [data-id="' + messageId + '"] .like-count');
+// Função para remover o like de uma mensagem
+function removeLike(messageId) {
+    // Verifica se o usuário já votou nesta mensagem
+    if (hasUserVoted(messageId)) {
+        // Decrementa o contador de likes localmente
+        var likeCountElement = document.querySelector('.message[data-id="' + messageId + '"] .like-count');
         var currentLikes = parseInt(likeCountElement.textContent);
-        likeCountElement.textContent = currentLikes + 1;
+        likeCountElement.textContent = Math.max(currentLikes - 1, 0);
 
-        // Define que o usuário já votou
-        hasVoted = true;
+        // Remove o ID da mensagem da lista de mensagens curtidas
+        var votedMessages = JSON.parse(localStorage.getItem('votedMessages')) || [];
+        var index = votedMessages.indexOf(messageId.toString());
+        if (index !== -1) {
+            votedMessages.splice(index, 1);
+            localStorage.setItem('votedMessages', JSON.stringify(votedMessages));
+        }
     } else {
-        // Se o usuário já votou, você pode exibir uma mensagem informando que só é permitido um voto
-        console.log('Você já votou nesta mensagem.');
+        console.log('Você ainda não curtiu esta mensagem.');
     }
 }
 
-// Variável para armazenar o conteúdo da última mensagem
-var lastMessageContent = '';
+// Função para lidar com o clique no botão de "like"
+function handleLikeClick(messageId) {
+    // Verifica se o usuário já votou nesta mensagem
+    if (!hasUserVoted(messageId)) {
+        // Aqui você pode implementar a lógica para enviar uma requisição ao servidor informando que o usuário curtiu a mensagem
+        console.log('O usuário curtiu a mensagem com o ID:', messageId);
+
+        // Atualiza o contador de likes localmente
+        var likeCountElement = document.querySelector('.message[data-id="' + messageId + '"] .like-count');
+        var currentLikes = parseInt(likeCountElement.textContent);
+        likeCountElement.textContent = currentLikes + 1;
+
+        // Atualiza o estado do usuário para indicar que ele votou nesta mensagem
+        recordVote(messageId);
+    } else {
+        // Se o usuário já votou, remove o like
+        removeLike(messageId);
+    }
+}
 
 // Função para fazer uma requisição AJAX para obter as mensagens
 function fetchMessages() {
@@ -35,16 +63,17 @@ function fetchMessages() {
             messages.forEach(message => {
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
+                messageDiv.dataset.id = message.id; // Definir o atributo data-id com o id da mensagem
                 messageDiv.innerHTML = `
-                            <h3>${message.title}</h3>
-                            <p id="priority" class="priority-text" style="color: ${getColorByPriority(message.priority)};">Situação: ${message.priority}</p>
-                            <p>${message.content}</p>
-                            <p>Data e Hora: ${message.datetime}</p>
-                            <div class="like-container">
-                                <button class="like-button" onclick="handleLikeClick(${message.id})">👍</button>
-                                <span class="like-count">0</span>
-                            </div>
-                        `;
+                    <h3>${message.title}</h3>
+                    <p id="priority" class="priority-text" style="color: ${getColorByPriority(message.priority)};">Situação: ${message.priority}</p>
+                    <p>${message.content}</p>
+                    <p>Atualizado às: ${message.datetime}</p>
+                    <div class="like-container">
+                        <button class="like-button" onclick="handleLikeClick(${message.id})">👍</button>
+                        <span class="like-count">0</span>
+                    </div>
+                `;
                 messagesContainer.appendChild(messageDiv);
             });
 
@@ -58,7 +87,6 @@ function fetchMessages() {
             showNotificationWithUpdatedContent('Erro ao obter as mensagens.');
         });
 }
-
 
 // Atualiza as mensagens a cada 1 segundo (1000 milissegundos)
 setInterval(fetchMessages, 1000);
@@ -100,11 +128,10 @@ function fetchResolvedMessages() {
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
                 messageDiv.innerHTML = `
-                            <h3>${message.title}</h3>
-                            <p>${message.content}</p>
-                            <p>Data e Hora: ${message.datetime}</p>
-                            
-                        `;
+                    <h3>${message.title}</h3>
+                    <p>${message.content}</p>
+                    <p>Atualizado às: ${message.datetime}</p>
+                `;
                 resolvedMessagesContainer.appendChild(messageDiv);
             });
         })

@@ -2,70 +2,80 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f2f2f2;
+    background: linear-gradient(to bottom, #0159fc, #95e0fd); /* Gradiente vertical do azul para o branco */
 }
 
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+
 header img {
-    
     background-color: #333;
     color: #fff;
-    padding: 0px; /* Reduzindo o padding para 10 pixels */
+    padding: 0px;
     text-align: center;
-    background-size: cover; /* Redimensiona a imagem para cobrir todo o cabeçalho */
-    background-repeat: repeat; /* Evita que a imagem se repita */
-    background-position: center center; /* Centraliza a imagem */
-    height: 100px; /* Definindo uma altura para o cabeçalho */
-    width: 100%; /* Define a largura do cabeçalho como 100% da largura da tela */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100px;
+    width: 100%;
 }
+
 
 /* Estilo do menu de navegação */
 header nav {
-    text-align: center; /* Centralizar os itens do menu */
+    text-align: center;
+    width: 100%; /* Define a largura do menu como 100% */
+    
+    top: 0; /* Alinha o menu no topo da página */
+    background-color: #1667fd; /* Define a cor de fundo do menu */
+    z-index: 1000; /* Define a ordem de empilhamento para garantir que o menu esteja acima de outros elementos */
 }
 
 header nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    display: inline-block; /* Exibir como bloco inline para centralizar */
+    display: inline-block;
 }
 
 header nav ul li {
     display: inline;
-    margin-right: 20px; /* Espaço entre os itens do menu */
+    margin-right: 20px;
 }
 
 header nav ul li a {
     text-decoration: none;
-    color: #333; /* Cor do texto do link */
-    font-weight: bold; /* Estilo de fonte em negrito */
-    padding: 5px 10px; /* Espaçamento interno do link */
-    transition: background-color 0.3s ease; /* Transição suave para a cor de fundo */
+    color: #333;
+    font-weight: bold;
+    padding: 5px 10px;
+    transition: background-color 0.3s ease;
 }
 
 header nav ul li a:hover {
-    background-color: #0077ff60; /* Cor de fundo quando o link é hover */
+    background-color: #0077ff60;
 }
 
 /* Media query para dispositivos de largura máxima de 600px */
 @media only screen and (max-width: 600px) {
     header nav ul li {
-        display: block; /* Alterar para bloco para empilhar os itens do menu verticalmente */
-        margin: 10px 0; /* Espaçamento entre os itens do menu */
+        display: block;
+        margin: 10px 0;
     }
 }
 
-
-
-
-
 .container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 20px auto;
     padding: 20px;
     background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 form {
@@ -74,14 +84,24 @@ form {
 
 label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
 input[type="text"],
 textarea {
     width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
@@ -108,9 +128,10 @@ ul {
 
 li {
     background-color: #f9f9f9;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 li a {

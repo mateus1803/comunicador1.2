@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Histórico de Avisos resolvidos</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/messages.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/historico.css') }}">
 </head>
 
 <body>
@@ -34,7 +34,8 @@
                             messageDiv.innerHTML = `
                             <h3>${message.title}</h3>
                             <p>${message.content}</p>
-                            <p>Data e Hora: ${message.datetime}</p>
+                            <p>Atualizado às: ${message.datetime}</p>
+                            
                             
                         `;
                             resolvedMessagesContainer.appendChild(messageDiv);
@@ -44,6 +45,7 @@
                         console.error('Erro ao obter as mensagens resolvidas:', error);
                     });
             }
+            
 
             // Atualiza as mensagens resolvidas a cada 5 segundos (5000 milissegundos)
             setInterval(fetchResolvedMessages, 5000);

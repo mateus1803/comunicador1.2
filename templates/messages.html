@@ -16,7 +16,6 @@
     </div>
 </header>
 
-
 <body>
     <div class="container">
         <div class="message-container">
@@ -27,11 +26,7 @@
                 <div class="message">
                     <h3>{{ message.title }}</h3>
                     <p>{{ message.content }}</p>
-                    <p>Data e Hora: {{ message.datetime }}</p>
-                    <div class="like-container">
-                        <button class="like-button" onclick="handleLikeClick('{{ message.id }}')">👍</button>
-                        <span id="like-count-{{ message.id }}" class="like-count">0</span>
-                    </div>
+                    <p>Atualizado às: {{ message.datetime }}</p>
                     
                 </div>
                 {% endfor %}
@@ -40,7 +35,6 @@
     </div>
     <!-- Contêiner para pop-ups -->
     <div class="popup-container" id="popup-container"></div>
-
 </body>
 
 </html>

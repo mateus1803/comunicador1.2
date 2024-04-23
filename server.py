@@ -61,7 +61,8 @@ def get_resolved_messages():
 def update_message(message_id, new_title, new_content, new_priority):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    cursor.execute("UPDATE messages SET title=?, content=?, priority=? WHERE id=?", (new_title, new_content, new_priority, message_id))
+    datetime_now = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+    cursor.execute("UPDATE messages SET title=?, content=?, priority=?, datetime=? WHERE id=?", (new_title, new_content, new_priority, datetime_now, message_id))
     conn.commit()
     conn.close()
 
@@ -163,8 +164,6 @@ def view_message_history():
     # Obter todas as mensagens do banco de dados
     messages = get_messages()
     return render_template('message_history.html', messages=messages)
-
-
 
 if __name__ == '__main__':
     create_tables()
