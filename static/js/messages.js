@@ -68,7 +68,7 @@ function fetchMessages() {
                     <h3>${message.title}</h3>
                     <p id="priority" class="priority-text" style="color: ${getColorByPriority(message.priority)};">Situação: ${message.priority}</p>
                     <p>${message.content}</p>
-                    <p>Atualizado às: ${message.datetime}</p>
+                    <p>Atualizado: ${message.datetime}</p>
                     <div class="like-container">
                         <button class="like-button" onclick="handleLikeClick(${message.id})">👍</button>
                         <span class="like-count">0</span>
@@ -130,7 +130,7 @@ function fetchResolvedMessages() {
                 messageDiv.innerHTML = `
                     <h3>${message.title}</h3>
                     <p>${message.content}</p>
-                    <p>Atualizado às: ${message.datetime}</p>
+                    <p>Data e Hora: ${message.datetime}</p>
                 `;
                 resolvedMessagesContainer.appendChild(messageDiv);
             });
@@ -150,7 +150,7 @@ fetchResolvedMessages();
 function getColorByPriority(priority) {
     switch (priority) {
         case 'com problema':
-            return '#ff6600'; // Vermelho
+            return '#ff3300'; // Vermelho
         case 'manutenção':
             return '#fffb00'; // Azul
         case 'resolvido':

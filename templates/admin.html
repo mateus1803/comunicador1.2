@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enviar Aviso</title>
+    <link rel="icon" href="static\images\iconedesite1.png" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 
@@ -28,7 +29,7 @@
         <h1>Enviar Avisos</h1>
         <form action="/admin" method="post">
             <label for="title">Título:</label>
-            <input type="text" id="title" name="title"><br>
+            <input type="text" id="title" name="title"><br><br>
             <label for="content">Conteúdo:</label>
             <textarea id="content" name="content"></textarea><br>
             <label for="priority">Situação:</label>
@@ -82,7 +83,7 @@
         var menuPosition = menu.offsetTop;
 
         // Adicione um evento de rolagem à janela
-        window.onscroll = function() { 
+        window.onscroll = function () {
             // Verifique se a posição da rolagem é maior ou igual à posição inicial do menu
             if (window.pageYOffset >= menuPosition) {
                 // Adicione uma classe ao menu para mudar seu posicionamento
@@ -92,6 +93,15 @@
                 menu.classList.remove("sticky");
             }
         };
+        // Seleciona o campo de entrada pelo ID
+        var titleInput = document.getElementById('title');
+
+        // Adiciona um listener para o evento de entrada de texto
+        titleInput.addEventListener('input', function (event) {
+            // Converte o texto para maiúsculas
+            this.value = this.value.toUpperCase();
+        });
     </script>
 </body>
+
 </html>

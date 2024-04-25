@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Avisos</title>
+    <link rel="icon" href="static\images\iconedesite1.png" type="image/x-icon">
+
     <script src="{{ url_for('static', filename='js/messages.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/messages.css') }}">
 </head>
@@ -26,8 +28,7 @@
                 <div class="message">
                     <h3>{{ message.title }}</h3>
                     <p>{{ message.content }}</p>
-                    <p>Atualizado às: {{ message.datetime }}</p>
-                    
+                    <!--<p>Atualizado: {{ message.datetime }}</p>-->
                 </div>
                 {% endfor %}
             </div>

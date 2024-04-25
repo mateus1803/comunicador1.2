@@ -5,18 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Histórico de Avisos resolvidos</title>
+    <link rel="icon" href="static\images\iconedesite1.png" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/historico.css') }}">
 </head>
 
 <body>
+    <header>
+        <button class="back-button" onclick="window.history.back()">Voltar</button> <!-- Movido o botão de volta aqui -->
+    </header>
     <div class="container">
         <div class="message-container">
-            <h1>Avisos Resolvidos</h1>
+            <h1>Resolvidos</h1>
+            
             <div id="resolved-messages-container">
                 <!-- As mensagens resolvidas serão carregadas aqui -->
             </div>
         </div>
-        <button class="back-button" onclick="window.history.back()">Voltar</button>
         <div class="popup-container" id="popup-container"></div>
 
         <script>
@@ -34,7 +38,8 @@
                             messageDiv.innerHTML = `
                             <h3>${message.title}</h3>
                             <p>${message.content}</p>
-                            <p>Atualizado às: ${message.datetime}</p>
+
+                            <p>Atualizado: ${message.datetime}</p>
                             
                             
                         `;
@@ -52,6 +57,8 @@
 
             // Chamar a função fetchResolvedMessages uma vez quando a página for carregada
             fetchResolvedMessages();
+
+            
         </script>
 </body>
 

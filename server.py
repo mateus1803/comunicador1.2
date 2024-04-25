@@ -61,10 +61,12 @@ def get_resolved_messages():
 def update_message(message_id, new_title, new_content, new_priority):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    datetime_now = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-    cursor.execute("UPDATE messages SET title=?, content=?, priority=?, datetime=? WHERE id=?", (new_title, new_content, new_priority, datetime_now, message_id))
+    cursor.execute("UPDATE messages SET title=?, content=?, priority=? WHERE id=?", (new_title, new_content, new_priority, message_id))
     conn.commit()
     conn.close()
+
+
+    
 
 # Função para excluir uma mensagem do banco de dados
 def delete_message(message_id):
@@ -89,6 +91,33 @@ def get_message_history(message_id):
     history = cursor.fetchall()
     conn.close()
     return history
+
+#acabei de colocar pra ver se funciona
+def update_message(message_id, new_title, new_content, new_priority):
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute("SELECT priority FROM messages WHERE id=?", (message_id,))
+    old_priority = cursor.fetchone()[0]
+    cursor.execute("UPDATE messages SET title=?, content=?, priority=? WHERE id=?", (new_title, new_content, new_priority, message_id))
+    conn.commit()
+    conn.close()
+    
+    if old_priority != 'resolvido' and new_priority == 'resolvido':
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO message_history (message_id, action, datetime) VALUES (?, ?, ?)", (message_id, 'resolvido', datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")))
+        conn.commit()
+        conn.close()
+
+def get_messages():
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM messages WHERE priority != 'resolvido'")
+    messages = cursor.fetchall()
+    conn.close()
+    return messages
+
+
 
 @app.route('/')
 def index():
@@ -165,6 +194,8 @@ def view_message_history():
     messages = get_messages()
     return render_template('message_history.html', messages=messages)
 
+
+
 if __name__ == '__main__':
     create_tables()
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='192.168.1.43')
