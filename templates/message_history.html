@@ -25,32 +25,39 @@
 
         <script>
             // Função para fazer uma requisição AJAX para obter as mensagens resolvidas
-            function fetchResolvedMessages() {
-                fetch('/get_resolved_messages') // Rota no servidor para obter as mensagens resolvidas
-                    .then(response => response.json())
-                    .then(messages => {
-                        const resolvedMessagesContainer = document.getElementById('resolved-messages-container');
-                        resolvedMessagesContainer.innerHTML = ''; // Limpa as mensagens resolvidas existentes
+            // Função para fazer uma requisição AJAX para obter as mensagens resolvidas
+function fetchResolvedMessages() {
+    fetch('/get_resolved_messages') // Rota no servidor para obter as mensagens resolvidas
+        .then(response => response.json())
+        .then(messages => {
+            const resolvedMessagesContainer = document.getElementById('resolved-messages-container');
+            resolvedMessagesContainer.innerHTML = ''; // Limpa as mensagens resolvidas existentes
 
-                        messages.forEach(message => {
-                            const messageDiv = document.createElement('div');
-                            messageDiv.classList.add('message');
-                            messageDiv.innerHTML = `
-                            <h3>${message.title}</h3>
-                            <p>${message.content}</p>
+            messages.forEach(message => {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.innerHTML = `
+                    <h3>${message.title}</h3>
+                    <p>${message.content}</p>
+                    <p>Atualizado: ${message.datetime}</p>  
+                `;
+                resolvedMessagesContainer.appendChild(messageDiv);
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao obter as mensagens resolvidas:', error);
+        });
+}
 
-                            <p>Atualizado: ${message.datetime}</p>
-                            
-                            
-                        `;
-                            resolvedMessagesContainer.appendChild(messageDiv);
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Erro ao obter as mensagens resolvidas:', error);
-                    });
-            }
             
+            
+            // Função para obter a data e hora atuais
+            function getCurrentDateTime() {
+                const now = new Date();
+                const formattedDate = now.toLocaleDateString('pt-BR');
+                const formattedTime = now.toLocaleTimeString('pt-BR');
+                return `${formattedDate} ${formattedTime}`;
+            }
 
             // Atualiza as mensagens resolvidas a cada 5 segundos (5000 milissegundos)
             setInterval(fetchResolvedMessages, 5000);

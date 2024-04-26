@@ -71,10 +71,17 @@
             {% for message in resolved_messages %}
             <li>
                 <strong>{{ message[1] }}</strong>: {{ message[2] }}
+                <a href="/edit_message/{{ message[0] }}" class="edit" onclick="return confirmEdit()">Editar</a>
+                <a href="/delete_message/{{ message[0] }}" class="delete" onclick="return confirmDelete()">Excluir</a>
+                
             </li>
             {% endfor %}
         </ul>
+
+        
     </div>
+
+    
 
     <script>
         // Obtenha o menu de navegação
