@@ -25,7 +25,6 @@ def create_tables():
                   datetime TEXT NOT NULL,
                   FOREIGN KEY(message_id) REFERENCES messages(id))''')
     
-
     conn.commit()
     conn.close()
 
@@ -38,12 +37,11 @@ def insert_message(title, content, priority):
     conn.commit()
     conn.close()
 
-
 # Função para obter todas as mensagens do banco de dados
 def get_messages():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM messages")
+    cursor.execute("SELECT * FROM messages WHERE priority != 'resolvido'")
     messages = cursor.fetchall()
     conn.close()
     return messages
@@ -61,12 +59,18 @@ def get_resolved_messages():
 def update_message(message_id, new_title, new_content, new_priority):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    cursor.execute("UPDATE messages SET title=?, content=?, priority=? WHERE id=?", (new_title, new_content, new_priority, message_id))
+    cursor.execute("SELECT priority, datetime FROM messages WHERE id=?", (message_id,))
+    old_priority, old_datetime = cursor.fetchone()
+    cursor.execute("UPDATE messages SET title=?, content=?, priority=?, datetime=? WHERE id=?", (new_title, new_content, new_priority, datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S"), message_id))
     conn.commit()
     conn.close()
 
-
-    
+    if old_priority != 'resolvido' and new_priority == 'resolvido':
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO message_history (message_id, action, datetime) VALUES (?, ?, ?)", (message_id, 'resolvido', datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")))
+        conn.commit()
+        conn.close()
 
 # Função para excluir uma mensagem do banco de dados
 def delete_message(message_id):
@@ -92,32 +96,22 @@ def get_message_history(message_id):
     conn.close()
     return history
 
-#acabei de colocar pra ver se funciona
-def update_message(message_id, new_title, new_content, new_priority):
+# Função para obter as informações atualizadas de uma mensagem
+def get_message_info(message_id):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    cursor.execute("SELECT priority FROM messages WHERE id=?", (message_id,))
-    old_priority = cursor.fetchone()[0]
-    cursor.execute("UPDATE messages SET title=?, content=?, priority=? WHERE id=?", (new_title, new_content, new_priority, message_id))
-    conn.commit()
+    cursor.execute("SELECT priority, datetime FROM messages WHERE id=?", (message_id,))
+    new_priority, new_datetime = cursor.fetchone()
     conn.close()
-    
-    if old_priority != 'resolvido' and new_priority == 'resolvido':
-        conn = sqlite3.connect(DB_NAME)
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO message_history (message_id, action, datetime) VALUES (?, ?, ?)", (message_id, 'resolvido', datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")))
-        conn.commit()
-        conn.close()
+    return new_priority, new_datetime
 
-def get_messages():
-    conn = sqlite3.connect(DB_NAME)
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM messages WHERE priority != 'resolvido'")
-    messages = cursor.fetchall()
-    conn.close()
-    return messages
-
-
+# Rota para verificar se a mensagem foi editada e obter o novo horário
+@app.route('/check_message_edit/<int:message_id>')
+def check_message_edit(message_id):
+    old_priority, old_datetime = update_message(message_id, "", "", "")  # Chame a função de atualização sem fazer alterações
+    new_priority, new_datetime = get_message_info(message_id)  # Obtenha as informações atualizadas da mensagem
+    edited = (old_priority != new_priority or old_datetime != new_datetime)
+    return jsonify({"edited": edited, "newDatetime": new_datetime})
 
 @app.route('/')
 def index():
@@ -193,8 +187,6 @@ def view_message_history():
     # Obter todas as mensagens do banco de dados
     messages = get_messages()
     return render_template('message_history.html', messages=messages)
-
-
 
 if __name__ == '__main__':
     create_tables()

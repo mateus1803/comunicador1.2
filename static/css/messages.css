@@ -40,7 +40,7 @@ body {
 }   
 
 header {
-    background-color: #333; /* Cor de fundo do cabeçalho */
+    
     padding: 10px 0; /* Espaçamento interno do cabeçalho */
     text-align: center; /* Centraliza o conteúdo do cabeçalho */
 }
@@ -50,8 +50,22 @@ header {
     margin-left: 10px; /* Adiciona um espaçamento à esquerda para separar o botão das outras informações */
 }
 
+.menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0; /* Adiciona essa propriedade */
+    background-color: #333;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    text-align: center; /* Centraliza o conteúdo do menu */
+}
+
+
 
 .menu a {
+    
     color: #fff; /* Cor do texto do link */
     text-decoration: none; /* Remove sublinhado padrão do link */
     padding: 10px 20px; /* Espaçamento interno do link */
@@ -188,4 +202,6 @@ p {
     font-size: 16px;
     margin: 0;
 }
+
+
 

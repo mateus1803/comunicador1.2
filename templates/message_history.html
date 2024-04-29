@@ -16,7 +16,6 @@
     <div class="container">
         <div class="message-container">
             <h1>Resolvidos</h1>
-            
             <div id="resolved-messages-container">
                 <!-- As mensagens resolvidas serão carregadas aqui -->
             </div>
@@ -24,18 +23,26 @@
         <div class="popup-container" id="popup-container"></div>
 
         <script>
-            // Função para fazer uma requisição AJAX para obter as mensagens resolvidas
-            // Função para fazer uma requisição AJAX para obter as mensagens resolvidas
+  // Função para fazer uma requisição AJAX para obter as mensagens resolvidas
 function fetchResolvedMessages() {
     fetch('/get_resolved_messages') // Rota no servidor para obter as mensagens resolvidas
         .then(response => response.json())
         .then(messages => {
             const resolvedMessagesContainer = document.getElementById('resolved-messages-container');
-            resolvedMessagesContainer.innerHTML = ''; // Limpa as mensagens resolvidas existentes
+            
+            // Remove todas as mensagens existentes
+            resolvedMessagesContainer.innerHTML = '';
 
-            messages.forEach(message => {
+            // Adiciona as novas mensagens no início da lista
+            messages.forEach((message, index) => {
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message');
+
+                // Se for a mensagem mais recente, adiciona a classe "highlighted"
+                if (index === 0) {
+                    messageDiv.classList.add('highlighted');
+                }
+
                 messageDiv.innerHTML = `
                     <h3>${message.title}</h3>
                     <p>${message.content}</p>
@@ -49,24 +56,15 @@ function fetchResolvedMessages() {
         });
 }
 
-            
-            
-            // Função para obter a data e hora atuais
-            function getCurrentDateTime() {
-                const now = new Date();
-                const formattedDate = now.toLocaleDateString('pt-BR');
-                const formattedTime = now.toLocaleTimeString('pt-BR');
-                return `${formattedDate} ${formattedTime}`;
-            }
+// Atualiza as mensagens resolvidas a cada 5 segundos (5000 milissegundos)
+setInterval(fetchResolvedMessages, 5000);
 
-            // Atualiza as mensagens resolvidas a cada 5 segundos (5000 milissegundos)
-            setInterval(fetchResolvedMessages, 5000);
+// Chamar a função fetchResolvedMessages uma vez quando a página for carregada
+fetchResolvedMessages();
 
-            // Chamar a função fetchResolvedMessages uma vez quando a página for carregada
-            fetchResolvedMessages();
 
-            
         </script>
+    </div>
 </body>
 
 </html>
